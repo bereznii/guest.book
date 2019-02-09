@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Notifications\NewCommentNotification;
+use Illuminate\Support\Facades\Notification;
+
 use App\Comment;
 use App\User;
 
@@ -43,6 +46,15 @@ class BookController extends Controller
             $comment->save();
         }
 
+        $this->sendNotifications();
+
         return redirect(route('list'));
+    }
+
+    private function sendNotifications() {
+
+        $users = User::where('id', '!=', Auth::id())->get();
+
+        Notification::send($users, new NewCommentNotification());
     }
 }

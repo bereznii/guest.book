@@ -20,4 +20,4 @@ Auth::routes(['verify' => true]);
 Route::get('/home', 'HomeController@index')->name('home');
 
 //action
-Route::post('/comment', 'BookController@comment')->middleware('auth')->middleware('verified')->name('comment');
+Route::post('/comment', 'BookController@comment')->middleware('auth')->name('comment');//->middleware('verified')
