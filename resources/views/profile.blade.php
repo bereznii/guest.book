@@ -10,15 +10,15 @@
                         <table class="table table-default">
                             <tbody>
                                 <tr>
-                                    <td>ID</td>
+                                    <th scope="row">ID</td>
                                     <td>{{$user->id}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Имя</td>
+                                    <th scope="row">Имя</td>
                                     <td>{{$user->name}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Почта</td>
+                                    <th scope="row">Почта</td>
                                     <td>{{$user->email}}</td>
                                 </tr>
                             </tbody>

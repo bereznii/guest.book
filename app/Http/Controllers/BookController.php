@@ -12,9 +12,9 @@ class BookController extends Controller
 {
     public function index() {
 
-        $comments = Comment::get();
+        $comments = Comment::orderBy('created_at', 'desc')->paginate(15);
         
-        return view('list')->with('comments', $comments);
+        return view('list', ['comments' => $comments]);
     }
 
     public function profile($id) {
@@ -22,10 +22,15 @@ class BookController extends Controller
         $comments = Comment::where('user_id', $id)->get();
         $user = User::where('id', $id)->first();
         
-        return view('profile')->with('comments', $comments)->with('user', $user);
+        return view('profile', ['comments' => $comments,
+                                'user' => $user]);
     }
 
     public function comment(Request $request) {
+
+        $validatedData = $request->validate([
+            'comment' => 'required',
+        ]);
 
         if (Auth::check()) {
 
