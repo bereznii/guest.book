@@ -15,6 +15,8 @@ class BookController extends Controller
 {
     public function index() {
 
+        //Auth::user()->isAdmin();
+
         $comments = Comment::orderBy('created_at', 'desc')->paginate(15);
         
         return view('list', ['comments' => $comments]);
@@ -48,6 +50,13 @@ class BookController extends Controller
 
         $this->sendNotifications();
 
+        return redirect(route('list'));
+    }
+
+    public function deleteComment($id) {
+        
+        Comment::destroy($id);
+        
         return redirect(route('list'));
     }
 

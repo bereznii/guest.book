@@ -21,3 +21,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //action
 Route::post('/comment', 'BookController@comment')->middleware('auth')->name('comment');//->middleware('verified')
+Route::delete('/delete_comment/{id}', 'BookController@deleteComment')->middleware('auth')->name('delete_comment');//->middleware('verified')

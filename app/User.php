@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use Illuminate\Support\Facades\Auth;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
@@ -27,4 +29,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Checks is current user is admin.
+     */
+    public function isAdmin() {
+        if($this->where('id', Auth::id())->first()->role == 'admin') return 1;
+    }
 }

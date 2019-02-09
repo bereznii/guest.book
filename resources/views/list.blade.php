@@ -23,19 +23,29 @@
                 </form>
                 <table class="table table-hover">
                     <thead>
-                        <tr class="d-flex">
-                            <th class="col-2">Пользователь</th>
-                            <th class="col-8">Отзыв</th>
-                            <th class="col-2">Время</th>
+                        <tr>
+                            <th>Пользователь</th>
+                            <th>Отзыв</th>
+                            <th>Время</th>
+                            @if(Auth::user()->isAdmin())<th></th>@endif
                         </tr>
                     </thead>
                     <tbody>
                         @if(isset($comments))
                             @foreach($comments as $comment)
-                            <tr class="d-flex">
-                                <td class="col-2"><a href="{{route('profile', ['id' => $comment->user_id])}}">{{$comment->user_name}}</a></td>
-                                <td class="col-8"><p>{{$comment->text}}</p></td>
-                                <td class="col-2"><p>{{$comment->created_at}}</p></td>
+                            <tr>
+                                <td><a href="{{route('profile', ['id' => $comment->user_id])}}">{{$comment->user_name}}</a></td>
+                                <td style="width:70%"><p>{{$comment->text}}</p></td>
+                                <td><p>{{$comment->created_at}}</p></td>
+                                @if(Auth::user()->isAdmin())
+                                    <td>
+                                        <form action="{{ route('delete_comment', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post" style="display: inline;">
+                                            @method('DELETE')
+                                            @csrf
+                                            <a style="color: #c60000" href="javascript:document.getElementById('destroy_form{{$comment->id}}').submit();"><i class="fas fa-trash"></i></a>
+                                        </form>
+                                    </td>
+                                @endif
                             </tr>
                             @endforeach
                         @endif
