@@ -11,6 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'BookController@index')->name('list');
+Route::get('/profile/{id}', 'BookController@profile')->name('profile');
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+//action
+Route::post('/comment', 'BookController@comment')->middleware('auth')->name('comment');
