@@ -15,10 +15,11 @@ class UsersTableSeeder extends Seeder
             DB::table('users')->insert([
                 'name' => 'User ' . $i,
                 'email' => 'user'.$i.'@mail.com',
-                'password' => 'NONE',
+                'password' => 'none',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
-                'role' => NULL,
+                'role' => null,
+                'blocked' => 0,
             ]);
         }
         

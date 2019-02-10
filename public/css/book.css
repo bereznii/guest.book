@@ -1,0 +1,11 @@
+td.text {
+    width:70%;
+}
+
+form.delete, form.patch {
+    display: inline;
+}
+
+a.delete_btn {
+    color: #c60000;
+}

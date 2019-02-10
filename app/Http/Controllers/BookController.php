@@ -15,29 +15,46 @@ class BookController extends Controller
 {
     public function index() {
 
+        if(Auth::user() && Auth::user()->isAdmin()) {
+            $isAdmin = true;
+        } else {
+            $isAdmin = false;
+        }
         //Auth::user()->isAdmin();
 
         $comments = Comment::orderBy('created_at', 'desc')->paginate(15);
         
-        return view('list', ['comments' => $comments]);
+        return view('list', [
+            'comments' => $comments,
+            'isAdmin' => $isAdmin
+        ]);
     }
 
-    public function profile($id) {
+    public function getProfile($id) {
 
-        $comments = Comment::where('user_id', $id)->get();
+        if(Auth::user() && Auth::user()->isAdmin()) {
+            $isAdmin = true;
+        } else {
+            $isAdmin = false;
+        }
+
+        $comments = Comment::where('user_id', $id)->orderBy('created_at', 'desc')->get();
         $user = User::where('id', $id)->first();
         
-        return view('profile', ['comments' => $comments,
-                                'user' => $user]);
+        return view('profile', [
+            'comments' => $comments,
+            'user' => $user,
+            'isAdmin' => $isAdmin
+        ]);
     }
 
-    public function comment(Request $request) {
+    public function setComment(Request $request) {
 
         $validatedData = $request->validate([
             'comment' => 'required',
         ]);
 
-        if (Auth::check()) {
+        if (Auth::check() && !Auth::user()->isBlocked()) {
 
             $comment = new Comment;
 
@@ -46,18 +63,29 @@ class BookController extends Controller
             $comment->text = $request->comment;
 
             $comment->save();
+            
+            $this->sendNotifications();
         }
-
-        $this->sendNotifications();
 
         return redirect(route('list'));
     }
 
-    public function deleteComment($id) {
+    public function destroyComment($id) {
         
-        Comment::destroy($id);
+        if(Auth::user()->isAdmin()) {
+            Comment::destroy($id);
+        }
         
         return redirect(route('list'));
+    }
+
+    public function updateUser(Request $request, $id) {
+        
+        $user = User::find($id);
+        $user->blocked = $request->blocked;
+        $user->save();
+        
+        return redirect(route('profile', ['id' => $id]));
     }
 
     private function sendNotifications() {

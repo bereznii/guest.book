@@ -36,4 +36,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin() {
         if($this->where('id', Auth::id())->first()->role == 'admin') return 1;
     }
+
+    /**
+     * Checks is current user is blocked.
+     */
+    public function isBlocked() {
+        if($this->where('id', Auth::id())->first()->blocked == '1') return 1;
+    }
 }

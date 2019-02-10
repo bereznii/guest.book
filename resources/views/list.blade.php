@@ -27,7 +27,7 @@
                             <th>Пользователь</th>
                             <th>Отзыв</th>
                             <th>Время</th>
-                            @if(Auth::user()->isAdmin())<th></th>@endif
+                            @if($isAdmin)<th></th>@endif
                         </tr>
                     </thead>
                     <tbody>
@@ -35,14 +35,14 @@
                             @foreach($comments as $comment)
                             <tr>
                                 <td><a href="{{route('profile', ['id' => $comment->user_id])}}">{{$comment->user_name}}</a></td>
-                                <td style="width:70%"><p>{{$comment->text}}</p></td>
+                                <td class="text"><p>{{$comment->text}}</p></td>
                                 <td><p>{{$comment->created_at}}</p></td>
-                                @if(Auth::user()->isAdmin())
+                                @if($isAdmin)
                                     <td>
-                                        <form action="{{ route('delete_comment', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post" style="display: inline;">
+                                        <form class="delete" action="{{ route('destroyComment', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post">
                                             @method('DELETE')
                                             @csrf
-                                            <a style="color: #c60000" href="javascript:document.getElementById('destroy_form{{$comment->id}}').submit();"><i class="fas fa-trash"></i></a>
+                                            <a class="delete_btn" href="javascript:document.getElementById('destroy_form{{$comment->id}}').submit();"><i class="fas fa-trash"></i></a>
                                         </form>
                                     </td>
                                 @endif
