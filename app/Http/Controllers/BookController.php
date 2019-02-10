@@ -17,7 +17,11 @@ class BookController extends Controller
      */
     public function index() {
 
-        $isAdmin = Auth::user()->isAdmin();
+        if(Auth::user() && Auth::user()->isAdmin()) {
+            $isAdmin = true;
+        } else {
+            $isAdmin = false;
+        }
 
         $comments = Comment::orderBy('created_at', 'desc')->paginate(15);
         

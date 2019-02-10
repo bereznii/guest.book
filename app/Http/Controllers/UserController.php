@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('index');;
+        $this->middleware('auth');
     }
 
     /**
@@ -59,7 +59,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $isAdmin = Auth::user()->isAdmin();
+        if(Auth::user() && Auth::user()->isAdmin()) {
+            $isAdmin = true;
+        } else {
+            $isAdmin = false;
+        }
 
         $comments = Comment::where('user_id', $id)->orderBy('created_at', 'desc')->get();
         $user = User::where('id', $id)->first();

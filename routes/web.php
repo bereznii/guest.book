@@ -22,5 +22,3 @@ Route::resources([
     'comment' => 'CommentController',
     'user' => 'UserController'
 ]);
-
-//->middleware('verified')

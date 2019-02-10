@@ -35,7 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isAdmin() {
         
-        if(Auth::user() && $this->where('id', Auth::id())->first()->role == 'admin') {
+        if($this->where('id', Auth::id())->first()->role == 'admin') {
             return true;
         } else {
             return false;

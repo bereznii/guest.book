@@ -33,21 +33,15 @@
                     <tbody>
                         @if(isset($comments))
                             @foreach($comments as $comment)
-                            <tr>
+                            <tr id="row-{{$comment->id}}">
                                 <td><a href="{{route('user.show', ['id' => $comment->user_id])}}">{{$comment->user_name}}</a></td>
                                 <td class="text"><p>{{$comment->text}}</p></td>
                                 <td><p>{{$comment->created_at}}</p></td>
                                 @if($isAdmin)
                                     <td>
-                                        <form class="delete" action="{{ route('comment.destroy', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post">
-                                            @method('DELETE')
-                                            @csrf
-                                            <a class="delete_btn" href="{{ route('comment.destroy', ['id' => $comment->id]) }}"
-                                                    onclick="event.preventDefault();
-                                                    document.getElementById('destroy_form{{$comment->id}}').submit();">
-                                                <i class="fas fa-trash" title="Удалить"></i>
-                                            </a>
-                                        </form>
+                                        <a class="delete_btn" href="">
+                                            <i class="fas fa-trash" id="{{$comment->id}}" title="Удалить"></i>
+                                        </a>
                                     </td>
                                 @endif
                             </tr>
@@ -60,4 +54,5 @@
         </div>
     </div>
 </div>
+<script src='/js/comment_destroy.js'></script>
 @endsection

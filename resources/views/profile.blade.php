@@ -11,7 +11,7 @@
                             <tbody>
                                 <tr>
                                     <th scope="row">ID</td>
-                                    <td>{{$user->id}}</td>
+                                    <td id="id">{{$user->id}}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Имя</td>
@@ -25,10 +25,7 @@
                                 <tr>
                                     <th scope="row">Статус</td>
                                     <td>
-                                        <form class="patch" action="{{ route('user.update', ['id' => $user->id]) }}" id="update_form{{$user->id}}" method="post">
-                                            @method('PATCH')
-                                            @csrf
-                                            @if($user->blocked)
+                                            <!--@if($user->blocked)
                                                 <input type="hidden" name="blocked" value="0">
                                                 <a href="{{ route('user.update', ['id' => $user->id]) }}"
                                                         onclick="event.preventDefault();
@@ -42,8 +39,16 @@
                                                         document.getElementById('update_form{{$user->id}}').submit();">
                                                     <i class="fas fa-lock-open" title="Заблокировать"></i>
                                                 </a>
+                                            @endif-->
+                                            @if($user->blocked)
+                                                <a href="">
+                                                    <i class="fas fa-lock" title="Разблокировать" id="lock-{{$user->id}}" do_status="0"></i>
+                                                </a>
+                                                @else
+                                                <a href="">
+                                                    <i class="fas fa-lock-open" title="Заблокировать" id="lock-{{$user->id}}" do_status="1"></i>
+                                                </a>
                                             @endif
-                                        </form>
                                     </td>
                                 </tr>            
                                 @endif
@@ -63,20 +68,14 @@
                     <tbody>
                         @if(isset($comments))
                             @foreach($comments as $comment)
-                            <tr>
+                            <tr id="row-{{$comment->id}}">
                                 <td><p>{{$comment->text}}</p></td>
                                 <td>{{$comment->created_at}}</td>
                                 @if($isAdmin)
                                     <td>
-                                        <form class="delete" action="{{ route('comment.destroy', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post">
-                                            @method('DELETE')
-                                            @csrf
-                                            <a class="delete_btn" href="{{ route('comment.destroy', ['id' => $comment->id]) }}"
-                                                    onclick="event.preventDefault();
-                                                    document.getElementById('destroy_form{{$comment->id}}').submit();">
-                                                <i class="fas fa-trash" title="Удалить"></i>
-                                            </a>
-                                        </form>
+                                        <a class="delete_btn" href="">
+                                            <i class="fas fa-trash" id="{{$comment->id}}" title="Удалить"></i>
+                                        </a>
                                     </td>
                                 @endif
                             </tr>
@@ -88,4 +87,6 @@
         </div>
     </div>
 </div>
+<script src='/js/comment_destroy.js'></script>
+<script src='/js/user_block.js'></script>
 @endsection
