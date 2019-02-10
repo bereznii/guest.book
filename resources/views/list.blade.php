@@ -14,7 +14,7 @@
                         </ul>
                     </div>
                 @endif
-                <form class="form-group" method="post" action="{{route('comment')}}">
+                <form class="form-group" method="post" action="{{route('comment.store')}}">
                     @csrf
                     <label for="comment">Комментарий:</label>
                     <textarea class="form-control" name="comment" rows="5" id="comment" placeholder="Ваш отзыв" required></textarea>
@@ -34,15 +34,19 @@
                         @if(isset($comments))
                             @foreach($comments as $comment)
                             <tr>
-                                <td><a href="{{route('profile', ['id' => $comment->user_id])}}">{{$comment->user_name}}</a></td>
+                                <td><a href="{{route('user.show', ['id' => $comment->user_id])}}">{{$comment->user_name}}</a></td>
                                 <td class="text"><p>{{$comment->text}}</p></td>
                                 <td><p>{{$comment->created_at}}</p></td>
                                 @if($isAdmin)
                                     <td>
-                                        <form class="delete" action="{{ route('destroyComment', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post">
+                                        <form class="delete" action="{{ route('comment.destroy', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post">
                                             @method('DELETE')
                                             @csrf
-                                            <a class="delete_btn" href="javascript:document.getElementById('destroy_form{{$comment->id}}').submit();"><i class="fas fa-trash"></i></a>
+                                            <a class="delete_btn" href="{{ route('comment.destroy', ['id' => $comment->id]) }}"
+                                                    onclick="event.preventDefault();
+                                                    document.getElementById('destroy_form{{$comment->id}}').submit();">
+                                                <i class="fas fa-trash" title="Удалить"></i>
+                                            </a>
                                         </form>
                                     </td>
                                 @endif

@@ -25,15 +25,23 @@
                                 <tr>
                                     <th scope="row">Статус</td>
                                     <td>
-                                        <form class="patch" action="{{ route('updateUser', ['id' => $user->id]) }}" id="update_form{{$user->id}}" method="post">
+                                        <form class="patch" action="{{ route('user.update', ['id' => $user->id]) }}" id="update_form{{$user->id}}" method="post">
                                             @method('PATCH')
                                             @csrf
                                             @if($user->blocked)
                                                 <input type="hidden" name="blocked" value="0">
-                                                <a href="javascript:document.getElementById('update_form{{$user->id}}').submit();"><i class="fas fa-lock" title="Разблокировать"></i></a>
-                                            @else
+                                                <a href="{{ route('user.update', ['id' => $user->id]) }}"
+                                                        onclick="event.preventDefault();
+                                                        document.getElementById('update_form{{$user->id}}').submit();">
+                                                    <i class="fas fa-lock" title="Разблокировать"></i>
+                                                </a>
+                                                @else
                                                 <input type="hidden" name="blocked" value="1">
-                                                <a href="javascript:document.getElementById('update_form{{$user->id}}').submit();"><i class="fas fa-lock-open" title="Заблокировать"></i></a>
+                                                <a href="{{ route('user.update', ['id' => $user->id]) }}"
+                                                        onclick="event.preventDefault();
+                                                        document.getElementById('update_form{{$user->id}}').submit();">
+                                                    <i class="fas fa-lock-open" title="Заблокировать"></i>
+                                                </a>
                                             @endif
                                         </form>
                                     </td>
@@ -49,6 +57,7 @@
                         <tr>
                             <th>Отзыв</th>
                             <th>Время</th>
+                            @if($isAdmin)<th></th>@endif
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +66,19 @@
                             <tr>
                                 <td><p>{{$comment->text}}</p></td>
                                 <td>{{$comment->created_at}}</td>
+                                @if($isAdmin)
+                                    <td>
+                                        <form class="delete" action="{{ route('comment.destroy', ['id' => $comment->id]) }}" id="destroy_form{{$comment->id}}" method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <a class="delete_btn" href="{{ route('comment.destroy', ['id' => $comment->id]) }}"
+                                                    onclick="event.preventDefault();
+                                                    document.getElementById('destroy_form{{$comment->id}}').submit();">
+                                                <i class="fas fa-trash" title="Удалить"></i>
+                                            </a>
+                                        </form>
+                                    </td>
+                                @endif
                             </tr>
                             @endforeach
                         @endif
